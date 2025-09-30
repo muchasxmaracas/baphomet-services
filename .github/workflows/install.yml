@@ -42,7 +42,7 @@ jobs:
               cd $BASE_DIR
             fi
 
-            if [[ ! -d $APP_DIR ]]; then
+            if [[ ! -d $REPO_DIR ]]; then
               sudo git clone https://github.com/muchasxmaracas/baphomet-services.git && cd $REPO_DIR
             else
               cd $REPO_DIR
@@ -52,5 +52,5 @@ jobs:
             
             # Run any necessary install scripts (if not using Docker)
             sudo chmod 774 $BASE_DIR/$REPO_DIR/$APP_DIR/bitwarden.sh
-            sudo bash $BASE_DIR/$REPO_DIR/$APP_DIR/bitwarden.sh install
+            sudo -u sysadmin bash $BASE_DIR/$REPO_DIR/$APP_DIR/bitwarden.sh install
 
