@@ -26,6 +26,8 @@ jobs:
           script: | 
             whoami
 
+            export choice="y"
+            
             cd /
 
             export BASE_DIR="/app/install"
