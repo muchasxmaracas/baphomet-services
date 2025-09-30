@@ -28,20 +28,9 @@ jobs:
 
             cd /
 
-            export BASE_DIR="/home/sysadmin/app/install"
-            export SVC_DIR="/home/sysadmin/app/services/bitwarden"
+            export BASE_DIR="/home/sysadmin/app/"
             export REPO_DIR="baphomet-services"
             export APP_DIR="bitwarden/self-host"
-
-            export LETSENCRYPT="y"
-            export DOMAIN="vault.baphomet.cloud"
-            export EMAIL="sandromarton95@gmail.com"
-
-            if [[ ! -d $SVC_DIR ]]; then
-              mkdir -p $SVC_DIR
-            else
-              echo "Runtime directory for Bitwarden already exists!"
-            fi
 
             if [[ ! -d $BASE_DIR ]]; then
               mkdir -p $BASE_DIR && cd $BASE_DIR
@@ -57,5 +46,6 @@ jobs:
             
             git pull origin main
             
-            # Run any necessary install scripts (if not using Docker)
-            bash $BASE_DIR/$REPO_DIR/$APP_DIR/bitwarden.sh install
+            cd docker-unified
+            docker-compose up --build --detach
+            

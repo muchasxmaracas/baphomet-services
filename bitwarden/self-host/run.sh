@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -e
 
+export DOMAIN="vault.baphomet.cloud"
+export LETSENCRYPT="y"
+export EMAIL="sandromarton95@gmail.com"
+
 # Setup
 if docker compose &> /dev/null; then
     dccmd='docker compose'
