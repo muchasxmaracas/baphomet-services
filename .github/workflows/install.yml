@@ -29,7 +29,8 @@ jobs:
             cd /
 
             export BASE_DIR="/app"
-            export APP_DIR="baphomet-services/bitwarden/self-host/"
+            export REPO_DIR="baphomet-services"
+            export APP_DIR="bitwarden/self-host"
 
             export LETSENCRYPT="y"
             export DOMAIN="vault.baphomet.cloud"
@@ -42,14 +43,14 @@ jobs:
             fi
 
             if [[ ! -d $APP_DIR ]]; then
-              sudo git clone https://github.com/muchasxmaracas/baphomet-services.git && cd $APP_DIR
+              sudo git clone https://github.com/muchasxmaracas/baphomet-services.git && cd $REPO_DIR
             else
-              cd $APP_DIR 
+              cd $REPO_DIR
             fi
             
             sudo git pull origin main
             
             # Run any necessary install scripts (if not using Docker)
-            sudo chmod 774 baphomet-services/bitwarden/self-host/bitwarden.sh
-            sudo sh ./baphomet-services/bitwarden/self-host/bitwarden.sh install
+            sudo chmod 774 $BASE_DIR/$REPO_DIR/$APP_DIR/bitwarden.sh
+            sudo sh $BASE_DIR/$REPO_DIR/$APP_DIR/bitwarden.sh install
 
