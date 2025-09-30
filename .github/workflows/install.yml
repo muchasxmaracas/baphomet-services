@@ -26,12 +26,10 @@ jobs:
           script: | 
             whoami
 
-            export choice="y"
-
             cd /
 
-            export BASE_DIR="/app/install"
-            export SVC_DIR="/app/services/bitwarden"
+            export BASE_DIR="/home/sysadmin/app/install"
+            export SVC_DIR="/home/sysadmin/app/services/bitwarden"
             export REPO_DIR="baphomet-services"
             export APP_DIR="bitwarden/self-host"
 
@@ -40,24 +38,24 @@ jobs:
             export EMAIL="sandromarton95@gmail.com"
 
             if [[ ! -d $SVC_DIR ]]; then
-              sudo mkdir -p $SVC_DIR
+              mkdir -p $SVC_DIR
             else
               echo "Runtime directory for Bitwarden already exists!"
             fi
 
             if [[ ! -d $BASE_DIR ]]; then
-              sudo mkdir -p $BASE_DIR && cd $BASE_DIR
+              mkdir -p $BASE_DIR && cd $BASE_DIR
             else
               cd $BASE_DIR
             fi
 
             if [[ ! -d $REPO_DIR ]]; then
-              sudo git clone https://github.com/muchasxmaracas/baphomet-services.git && cd $REPO_DIR
+              git clone https://github.com/muchasxmaracas/baphomet-services.git && cd $REPO_DIR
             else
               cd $REPO_DIR
             fi
             
-            sudo git pull origin main
+            git pull origin main
             
             # Run any necessary install scripts (if not using Docker)
-            echo 'y' | sudo bash $BASE_DIR/$REPO_DIR/$APP_DIR/bitwarden.sh install
+            bash $BASE_DIR/$REPO_DIR/$APP_DIR/bitwarden.sh install

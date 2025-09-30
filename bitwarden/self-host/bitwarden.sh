@@ -45,7 +45,7 @@ fi
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 SCRIPT_NAME=$(basename "$0")
 SCRIPT_PATH="$DIR/$SCRIPT_NAME"
-OUTPUT="/app/services/bitwarden/bwdata"
+OUTPUT="/home/sysadmin/services/bitwarden/bwdata"
 if [ $# -eq 2 ]
 then
     OUTPUT=$2
