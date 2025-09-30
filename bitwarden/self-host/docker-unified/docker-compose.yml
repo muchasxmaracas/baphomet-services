@@ -19,7 +19,7 @@ services:
   db:
     environment:
       MARIADB_USER: "bitwarden"
-      MARIADB_PASSWORD: "super_strong_password"
+      MARIADB_PASSWORD: $BW_DB_PASSWORD
       MARIADB_DATABASE: "bitwarden_vault"
       MARIADB_RANDOM_ROOT_PASSWORD: "true"
     image: mariadb:10
