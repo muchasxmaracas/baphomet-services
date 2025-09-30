@@ -47,9 +47,9 @@ jobs:
               git clone https://github.com/muchasxmaracas/baphomet-services.git && cd $APP_DIR
             fi
             
-            git pull origin main
+            sudo git pull origin main
             
             # Run any necessary install scripts (if not using Docker)
-            chmod 774 baphomet-services/bitwarden/self-host/bitwarden.sh
-            sh ./baphomet-services/bitwarden/self-host/bitwarden.sh install
+            sudo chmod 774 baphomet-services/bitwarden/self-host/bitwarden.sh
+            sudo sh ./baphomet-services/bitwarden/self-host/bitwarden.sh install
 
