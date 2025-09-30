@@ -36,13 +36,13 @@ jobs:
             export EMAIL="sandromarton95@gmail.com"
 
             if [[ ! -d $BASE_DIR ]]; then
-              mkdir -p $BASE_DIR && cd $BASE_DIR
+              sudo mkdir -p $BASE_DIR && cd $BASE_DIR
             else
               cd $BASE_DIR
             fi
 
             if [[ ! -d $APP_DIR ]]; then
-              mkdir -p $APP_DIR && cd $APP_DIR
+              sudo mkdir -p $APP_DIR && cd $APP_DIR
             else
               git clone git@github.com:muchasxmaracas/baphomet-services.git && cd $APP_DIR
             fi
