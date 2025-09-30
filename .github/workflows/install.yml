@@ -44,7 +44,7 @@ jobs:
             if [[ ! -d $APP_DIR ]]; then
               sudo mkdir -p $APP_DIR && cd $APP_DIR
             else
-              git clone git@github.com:muchasxmaracas/baphomet-services.git && cd $APP_DIR
+              git clone https://github.com/muchasxmaracas/baphomet-services.git && cd $APP_DIR
             fi
             
             git pull origin main
