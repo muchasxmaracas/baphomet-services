@@ -42,7 +42,7 @@ jobs:
             fi
 
             if [[ ! -d $APP_DIR ]]; then
-              git clone https://github.com/muchasxmaracas/baphomet-services.git && cd $APP_DIR
+              sudo git clone https://github.com/muchasxmaracas/baphomet-services.git && cd $APP_DIR
             else
               cd $APP_DIR 
             fi
