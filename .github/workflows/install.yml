@@ -18,50 +18,50 @@ jobs:
       # 1. Use the SSH Action to connect and execute commands
       - name: Install BitWarden on remote server
         uses: appleboy/ssh-action@v1.2.2
+        env:
+          BW_DB_PASSWORD: ${{ secrets.BW_DB_PASSWORD }}
+          BW_INSTALLATION_ID: ${{ secrets.BW_INSTALLATION_ID }}
+          BW_INSTALLATION_KEY: ${{ secrets.BW_INSTALLATION_KEY }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           port: 22
-        env:
-          BW_DB_PASSWORD: ${{ secrets.BW_DB_PASSWORD }}
-          BW_INSTALLATION_ID: ${{ secrets.BW_INSTALLATION_ID }}
-          BW_INSTALLATION_KEY: ${{ secrets.BW_INSTALLATION_KEY }}
-        run: | 
-          whoami
+          script: | 
+            whoami
 
-          cd /
+            cd /
 
-          export BASE_DIR="/home/sysadmin/app/"
-          export REPO_DIR="baphomet-services"
-          export APP_DIR="bitwarden/self-host"
+            export BASE_DIR="/home/sysadmin/app/"
+            export REPO_DIR="baphomet-services"
+            export APP_DIR="bitwarden/self-host"
 
-          if [[ ! -d $BASE_DIR ]]; then
-            mkdir -p $BASE_DIR && cd $BASE_DIR
-          else
-            cd $BASE_DIR
-          fi
+            if [[ ! -d $BASE_DIR ]]; then
+              mkdir -p $BASE_DIR && cd $BASE_DIR
+            else
+              cd $BASE_DIR
+            fi
 
-          if [[ ! -d $REPO_DIR ]]; then
-            git clone https://github.com/muchasxmaracas/baphomet-services.git && cd $REPO_DIR
-          else
-            cd $REPO_DIR
-          fi
-          
-          git pull origin main
-          
-          cd $BASE_DIR/$REPO_DIR/$APP_DIR/docker-unified
-          
-          # --- STEP 2: INJECT VALUES INTO settings.env ON THE REMOTE SERVER ---
-          echo "Applying database and installation secrets from GitHub..."
+            if [[ ! -d $REPO_DIR ]]; then
+              git clone https://github.com/muchasxmaracas/baphomet-services.git && cd $REPO_DIR
+            else
+              cd $REPO_DIR
+            fi
+            
+            git pull origin main
+            
+            cd $BASE_DIR/$REPO_DIR/$APP_DIR/docker-unified
+            
+            # --- STEP 2: INJECT VALUES INTO settings.env ON THE REMOTE SERVER ---
+            echo "Applying database and installation secrets from GitHub..."
 
-          # 1. Update BW_DB_PASSWORD
-          sed -i "s|^\(BW_DB_PASSWORD=\).*|\1$BW_DB_PASSWORD|g" settings.env
-          
-          # 2. Update BW_INSTALLATION_ID
-          sed -i "s|^\(BW_INSTALLATION_ID=\).*|\1$BW_INSTALLATION_ID|g" settings.env
-          
-          # 3. Update BW_INSTALLATION_KEY
-          sed -i "s|^\(BW_INSTALLATION_KEY=\).*|\1$BW_INSTALLATION_KEY|g" settings.env
-                      
-          docker compose up --build --detach
+            # 1. Update BW_DB_PASSWORD
+            sed -i "s|^\(BW_DB_PASSWORD=\).*|\1$BW_DB_PASSWORD|g" settings.env
+            
+            # 2. Update BW_INSTALLATION_ID
+            sed -i "s|^\(BW_INSTALLATION_ID=\).*|\1$BW_INSTALLATION_ID|g" settings.env
+            
+            # 3. Update BW_INSTALLATION_KEY
+            sed -i "s|^\(BW_INSTALLATION_KEY=\).*|\1$BW_INSTALLATION_KEY|g" settings.env
+                        
+            docker compose up --build --detach
