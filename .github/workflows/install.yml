@@ -51,6 +51,6 @@ jobs:
             sudo git pull origin main
             
             # Run any necessary install scripts (if not using Docker)
-            sudo chmod -R 775 $BASE_DIR/$REPO_DIR/$APP_DIR/bitwarden.sh
+            sudo chmod -R 775 $BASE_DIR/$REPO_DIR/$APP_DIR/
             sudo -u sysadmin bash $BASE_DIR/$REPO_DIR/$APP_DIR/bitwarden.sh install
 
