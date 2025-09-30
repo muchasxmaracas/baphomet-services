@@ -46,6 +46,6 @@ jobs:
             
             git pull origin main
             
-            cd docker-unified
+            cd $BASE_DIR/$REPO_DIR/$APP_DIR/docker-unified
             docker-compose up --build --detach
             
