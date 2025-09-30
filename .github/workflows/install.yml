@@ -23,6 +23,11 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           port: 22
+        env:
+          BW_DB_PASSWORD: ${{ secrets.BW_DB_PASSWORD }}
+          BW_INSTALLATION_ID: ${{ secrets.BW_INSTALLATION_ID }}
+          BW_INSTALLATION_KEY: ${{ secrets.BW_INSTALLATION_KEY }}
+          
           script: | 
             whoami
 
@@ -47,5 +52,18 @@ jobs:
             git pull origin main
             
             cd $BASE_DIR/$REPO_DIR/$APP_DIR/docker-unified
-            docker compose up --build --detach
             
+            # --- STEP 2: INJECT VALUES INTO settings.env ON THE REMOTE SERVER ---
+            echo "Applying database and installation secrets from GitHub..."
+
+            # 1. Update BW_DB_PASSWORD
+            sed -i "s|^\(BW_DB_PASSWORD=\).*|\1$BW_DB_PASSWORD|g" settings.env
+            
+            # 2. Update BW_INSTALLATION_ID
+            sed -i "s|^\(BW_INSTALLATION_ID=\).*|\1$BW_INSTALLATION_ID|g" settings.env
+            
+            # 3. Update BW_INSTALLATION_KEY
+            sed -i "s|^\(BW_INSTALLATION_KEY=\).*|\1$BW_INSTALLATION_KEY|g" settings.env
+                        
+            docker compose up --build --detach
+                  
