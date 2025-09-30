@@ -28,12 +28,12 @@ jobs:
 
             cd /
 
-            export BASE_DIR = "/app"
-            export APP_DIR = "baphomet-services/bitwarden/self-host/"
+            export BASE_DIR="/app"
+            export APP_DIR="baphomet-services/bitwarden/self-host/"
 
-            export LETSENCRYPT = "y"
-            export DOMAIN = "vault.baphomet.cloud"
-            export EMAIL = "sandromarton95@gmail.com"
+            export LETSENCRYPT="y"
+            export DOMAIN="vault.baphomet.cloud"
+            export EMAIL="sandromarton95@gmail.com"
 
             if [[ ! -d $BASE_DIR ]]; then
               mkdir -p $BASE_DIR && cd $BASE_DIR
