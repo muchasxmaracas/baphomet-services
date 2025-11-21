@@ -32,7 +32,7 @@ jobs:
 
             cd /
 
-            export BASE_DIR="/home/sysadmin/app/"
+            export BASE_DIR="/home/sysadmin/app/repos/"
             export REPO_DIR="baphomet-services"
             export APP_DIR="bitwarden/self-host"
 
@@ -50,7 +50,8 @@ jobs:
             
             git pull origin main
             
-            cd $BASE_DIR/$REPO_DIR/$APP_DIR/docker-unified
+            sudo cp -R $BASE_DIR/$REPO_DIR /home/sysadmin/app/
+            cd /home/sysadmin/app/$APP_DIR/docker-unified
             
             # --- STEP 2: INJECT VALUES INTO settings.env ON THE REMOTE SERVER ---
             echo "Applying database and installation secrets from GitHub..."
