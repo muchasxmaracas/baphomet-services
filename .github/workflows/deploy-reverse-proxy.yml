@@ -35,7 +35,7 @@ jobs:
             cd "$BASE_DIR"
 
             if [[ ! -d $REPO_DIR ]]; then
-              git clone https://github.com/muchasxmaracas/baphomet-services.git "$REPO_DIR"
+              git clone https://github.com/muchasxmaracas/baphomet-services.git
             fi
 
             cd "$REPO_DIR"
