@@ -1,4 +1,4 @@
-name: Deployment Reverse Proxy Config to Linux Server
+name: Deployment of Reverse Proxy Config to Linux Server
 
 on:
   push:

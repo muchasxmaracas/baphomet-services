@@ -9,8 +9,8 @@ services:
     image: ${REGISTRY:-ghcr.io/bitwarden}/self-host:${TAG:-beta}
     restart: always
     ports:
-      - "80:10080"
-      - "443:10080"
+      - "8080:10080"
+      - "8443:10080"
     volumes:
       - bitwarden:/etc/bitwarden
       - logs:/var/log/bitwarden
