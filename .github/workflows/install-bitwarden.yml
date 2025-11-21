@@ -1,4 +1,4 @@
-name: Deployment to Linux Server
+name: Deployment of Bitwarden to Linux Server
 
 on:
   push:
