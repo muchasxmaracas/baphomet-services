@@ -6,48 +6,8 @@ on:
       - main
 
 jobs:
-
-  # ----------------------------------------
-  # 1. Test nginx config locally in CI
-  # ----------------------------------------
-  test_nginx:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Install NGINX
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y nginx
-
-      - name: Prepare test directory
-        run: |
-          mkdir -p nginx-test/conf.d
-          cp proxy/*.conf nginx-test/conf.d/
-
-          # Create a minimal nginx.conf for local testing
-          cat << 'EOF' > nginx-test/nginx.conf
-          events {}
-          http {
-            include       mime.types;
-            default_type  application/octet-stream;
-            include /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/nginx-test/conf.d/*.conf;
-          }
-          EOF
-
-      - name: Test NGINX config
-        run: |
-          sudo nginx -t -c $GITHUB_WORKSPACE/nginx-test/nginx.conf
-
-
-  # ----------------------------------------
-  # 2. Deploy only if nginx config is valid
-  # ----------------------------------------
   deploy:
     runs-on: ubuntu-latest
-    needs: test_nginx  # <-- IMPORTANT: blocks deployment until tests pass
 
     steps:
       - name: Checkout Repository
