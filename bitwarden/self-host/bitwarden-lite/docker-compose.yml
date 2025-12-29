@@ -6,10 +6,11 @@ services:
       - db
     env_file:
       - settings.env
-    image: ${REGISTRY:-ghcr.io/bitwarden}/self-host:${TAG:-beta}
+    image: ${REGISTRY:-ghcr.io/bitwarden}/lite:${TAG:-2025.12.1}
     restart: always
     ports:
-      - "127.0.0.1:8080"
+      - "80:8080"
+      - "443:8443"
     volumes:
       - bitwarden:/etc/bitwarden
       - logs:/var/log/bitwarden
@@ -18,7 +19,7 @@ services:
   db:
     environment:
       MARIADB_USER: "bitwarden"
-      MARIADB_PASSWORD: $BW_DB_PASSWORD
+      MARIADB_PASSWORD: "super_strong_password"
       MARIADB_DATABASE: "bitwarden_vault"
       MARIADB_RANDOM_ROOT_PASSWORD: "true"
     image: mariadb:10

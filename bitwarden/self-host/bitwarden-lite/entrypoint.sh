@@ -64,7 +64,7 @@ cp /etc/bitwarden/identity.pfx /app/Identity/identity.pfx
 cp /etc/bitwarden/identity.pfx /app/Sso/identity.pfx
 
 # Generate SSL certificates
-if [ "$BW_ENABLE_SSL" = "true" ] && [ ! -f /etc/bitwarden/${BW_SSL_KEY:-ssl.key} ]; then
+if [ "$BW_ENABLE_SSL" = "true" ] && [ ! -f /home/sysadmin/out/vault.baphomet.cloud_ecc/${BW_SSL_KEY} ]; then
   TMP_OPENSSL_CONF="/tmp/openssl_san.cnf"
   cat /usr/lib/ssl/openssl.cnf > "$TMP_OPENSSL_CONF"
   printf "\n[SAN]\nsubjectAltName=DNS:${BW_DOMAIN:-localhost}\nbasicConstraints=CA:true\n" >> "$TMP_OPENSSL_CONF"
@@ -74,8 +74,8 @@ if [ "$BW_ENABLE_SSL" = "true" ] && [ ! -f /etc/bitwarden/${BW_SSL_KEY:-ssl.key}
   -sha256 \
   -nodes \
   -days 36500 \
-  -keyout /etc/bitwarden/${BW_SSL_KEY:-ssl.key} \
-  -out /etc/bitwarden/${BW_SSL_CERT:-ssl.crt} \
+  -keyout /home/sysadmin/out/vault.baphomet.cloud_ecc/${BW_SSL_KEY} \
+  -out /home/sysadmin/out/vault.baphomet.cloud_ecc/${BW_SSL_CERT} \
   -reqexts SAN \
   -extensions SAN \
   -config "$TMP_OPENSSL_CONF" \

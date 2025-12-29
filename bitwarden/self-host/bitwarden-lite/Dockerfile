@@ -1,8 +1,8 @@
-# syntax = docker/dockerfile:1.11
+# syntax = docker/dockerfile:1.20
 ###############################################
 #                 Build stage                 #
 ###############################################
-FROM --platform=$BUILDPLATFORM alpine:3.21 AS web-setup
+FROM --platform=$BUILDPLATFORM alpine:3.22 AS web-setup
 ARG WEB_ARTIFACT_PATH
 
 # Add packages
@@ -16,12 +16,14 @@ WORKDIR /tmp
 
 # Grab last tag/release of the 'web' client
 RUN  if [ -z "${WEB_ARTIFACT_PATH}" ]; then \
-    git ls-remote --tags https://github.com/bitwarden/clients.git | grep refs/tags/web | cut -d/ -f3 | sort -Vr | head -1 > tag.txt; \
+    git ls-remote --tags https://github.com/bitwarden/clients.git \
+    | grep -E 'refs/tags/web-v[0-9]{4}\.([1-9]|1[0-2])\.[0-9]+' \
+    | cut -d/ -f3 | sort -Vr | head -1 > tag.txt; \
     fi
 
 # Extract the version of the 'web' client
 RUN if [ -z "${WEB_ARTIFACT_PATH}" ]; then \
-    cat tag.txt | grep -o -E "[0-9]{4}\.[0-9]{1,2}\.[0-9]+" > version.txt; \
+    cat tag.txt | grep -o -E '[0-9]{4}\.([1-9]|1[0-2])\.[0-9]+' > version.txt; \
     fi
 
 # Download the built release artifact for the 'web' client
@@ -185,7 +187,7 @@ RUN . /tmp/rid.txt && dotnet publish -c release -o /app/Scim --no-restore --no-s
 FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine3.21
 ARG TARGETPLATFORM
 LABEL com.bitwarden.product="bitwarden"
-LABEL com.bitwarden.project="unified"
+LABEL com.bitwarden.project="lite"
 ENV ASPNETCORE_ENVIRONMENT=Production
 ENV BW_ENABLE_ADMIN=true
 ENV BW_ENABLE_API=true
@@ -198,7 +200,7 @@ ENV BW_ENABLE_SSO=false
 ENV BW_DB_FILE="/etc/bitwarden/vault.db"
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 ENV globalSettings__selfHosted="true"
-ENV globalSettings__unifiedDeployment="true"
+ENV globalSettings__liteDeployment="true"
 ENV globalSettings__pushRelayBaseUri="https://push.bitwarden.com"
 ENV globalSettings__baseServiceUri__internalAdmin="http://localhost:5000"
 ENV globalSettings__baseServiceUri__internalApi="http://localhost:5001"
@@ -253,23 +255,23 @@ COPY --from=dotnet-build /app ./
 COPY --from=web-setup /tmp/build /app/Web
 
 # Set up supervisord
-COPY docker-unified/supervisord/*.ini /etc/supervisor.d/
-COPY docker-unified/supervisord/supervisord.conf /etc/supervisor/supervisord.conf
+COPY bitwarden-lite/supervisord/*.ini /etc/supervisor.d/
+COPY bitwarden-lite/supervisord/supervisord.conf /etc/supervisor/supervisord.conf
 RUN rm -f /etc/supervisord.conf
 
 # Set up nginx
-COPY docker-unified/nginx/nginx.conf /etc/nginx
-COPY docker-unified/nginx/proxy.conf /etc/nginx
-COPY docker-unified/nginx/mime.types /etc/nginx
-COPY docker-unified/nginx/security-headers.conf /etc/nginx
-COPY docker-unified/nginx/security-headers-ssl.conf /etc/nginx
-COPY docker-unified/nginx/logrotate.sh /
+COPY bitwarden-lite/nginx/nginx.conf /etc/nginx
+COPY bitwarden-lite/nginx/proxy.conf /etc/nginx
+COPY bitwarden-lite/nginx/mime.types /etc/nginx
+COPY bitwarden-lite/nginx/security-headers.conf /etc/nginx
+COPY bitwarden-lite/nginx/security-headers-ssl.conf /etc/nginx
+COPY bitwarden-lite/nginx/logrotate.sh /
 RUN chmod +x /logrotate.sh
 
 # Copy configuration templates
-COPY docker-unified/hbs/nginx-config.hbs /etc/hbs/
-COPY docker-unified/hbs/app-id.hbs /etc/hbs/
-COPY docker-unified/hbs/config.yaml /etc/hbs/
+COPY bitwarden-lite/hbs/nginx-config.hbs /etc/hbs/
+COPY bitwarden-lite/hbs/app-id.hbs /etc/hbs/
+COPY bitwarden-lite/hbs/config.yaml /etc/hbs/
 
 # Download hbs tool for generating final configurations
 RUN echo "$(curl --silent https://api.github.com/repos/bitwarden/Handlebars.conf/git/refs/tags | jq -r 'last(.[].ref)' | sed 's/refs\/tags\///')"  > /tmp/latest.txt
@@ -282,7 +284,7 @@ RUN unzip hbs.zip -d /usr/local/bin && mv /usr/local/bin/hbs* /usr/local/bin/hbs
 RUN chmod +x /usr/local/bin/hbs
 
 # Copy entrypoint script and make it executable
-COPY docker-unified/entrypoint.sh /entrypoint.sh
+COPY bitwarden-lite/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 VOLUME ["/etc/bitwarden"]
