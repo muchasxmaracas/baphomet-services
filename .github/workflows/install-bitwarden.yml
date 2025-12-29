@@ -51,7 +51,7 @@ jobs:
             git pull origin main
             
             sudo cp -R $BASE_DIR/$REPO_DIR /home/sysadmin/app/
-            cd /home/sysadmin/app/$REPO_DIR/$APP_DIR/docker-unified
+            cd /home/sysadmin/app/$REPO_DIR/$APP_DIR/bitwarden-lite
             sudo docker compose down
             
             # --- STEP 2: INJECT VALUES INTO settings.env ON THE REMOTE SERVER ---
