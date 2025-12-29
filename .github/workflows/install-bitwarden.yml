@@ -55,17 +55,15 @@ jobs:
             sudo docker compose down
             
             # --- STEP 2: INJECT VALUES INTO settings.env ON THE REMOTE SERVER ---
-            echo "Applying database and installation secrets from GitHub..."
-            
-            # Write .env for docker compose
-            echo "BW_DB_PASSWORD=$BW_DB_PASSWORD" | sudo tee .env
-            echo "BW_INSTALLATION_ID=$BW_INSTALLATION_ID" | sudo tee -a .env
-            echo "BW_INSTALLATION_KEY=$BW_INSTALLATION_KEY" | sudo tee -a .env
-
-            # Apply replacements to settings.env
-            sudo sed -i "s|^\(BW_DB_PASSWORD=\).*|\1$BW_DB_PASSWORD|g" settings.env
-            sudo sed -i "s|^\(BW_INSTALLATION_ID=\).*|\1$BW_INSTALLATION_ID|g" settings.env
-            sudo sed -i "s|^\(BW_INSTALLATION_KEY=\).*|\1$BW_INSTALLATION_KEY|g" settings.env
+            echo "Applying database and installation secrets..."
+            echo "BW_DB_PASSWORD=$BW_DB_PASSWORD" > settings.env
+            echo "BW_INSTALLATION_ID=$BW_INSTALLATION_ID" >> settings.env
+            echo "BW_INSTALLATION_KEY=$BW_INSTALLATION_KEY" >> settings.env
 
             # Bring up stack with preserved env
             sudo -E docker compose up --build --detach
+        env:
+          # This links the GitHub Secrets to the variables used in the 'envs' field above
+          BW_DB_PASSWORD: ${{ secrets.BW_DB_PASSWORD }}
+          BW_INSTALLATION_ID: ${{ secrets.BW_INSTALLATION_ID }}
+          BW_INSTALLATION_KEY: ${{ secrets.BW_INSTALLATION_KEY }}
